@@ -3,318 +3,273 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maximalist Italian Charm Studio</title>
+  <title>Italian Charm Bracelet Generator</title>
   <style>
     :root {
-      --frame-yellow: #fcd116;    /* Bright yellow border from designinspo.jpg */
-      --sky-blue: #5da9e9;
-      --hill-green: #7cb518;
-      --ink-black: #000000;
-      --paper-white: #ffffff;
+      --baby-pink: #fbc4d0;       /* Pastel baby pink */
+      --soft-pink-bg: #fff0f3;    /* Light ambient background tint */
+      --metal-base: #d2d2d4;      /* Stainless steel flat grey */
+      --charcoal-panel: #222226;  /* Minimalist dark workspace elements */
+      --text-light: #f5f5f7;
+      --text-muted: #9e9e9e;
+      --border-metallic: #828285;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Georgia', Times, serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       user-select: none;
     }
 
-    /* Page container simulating the outer yellow frame of designinspo.jpg */
     body {
-      background-color: var(--frame-yellow);
+      background-color: var(--baby-pink);
       padding: 25px;
       height: 100vh;
       display: flex;
       overflow: hidden;
     }
 
-    /* Main workspace wrapper containing the surreal background collage */
+    /* Main Workspace Container */
     .app-canvas {
       flex: 1;
-      border: 4px solid var(--ink-black);
-      background: linear-gradient(to bottom, var(--sky-blue) 0%, #bde0fe 50%, var(--hill-green) 55%, #4f772d 100%);
+      border: 2px solid rgba(0, 0, 0, 0.05);
+      background-color: var(--soft-pink-bg);
       position: relative;
       display: flex;
-      border-radius: 4px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.08);
     }
 
-    /* CSS Cloud/Surreal Elements Background Art Layers */
-    .app-canvas::before {
-      content: '☁️';
-      position: absolute;
-      top: 10%; left: 40%; font-size: 5rem; opacity: 0.35;
-    }
-    .app-canvas::after {
-      content: '☁️';
-      position: absolute;
-      top: 25%; left: 80%; font-size: 7rem; opacity: 0.25;
-    }
-
-    /* Heavy Ink Zine-Style Panels */
-    .zine-box {
-      background-color: var(--paper-white);
-      border: 3px solid var(--ink-black);
-      box-shadow: 7px 7px 0px var(--ink-black);
-      border-radius: 2px;
-      padding: 20px;
-    }
-
-    /* Left Control panel styled like a print flyer cut-out */
+    /* Left Control Tray (Text Erased, Minimal Layout) */
     .control-deck {
-      width: 350px;
-      margin: 30px;
+      width: 320px;
+      background-color: var(--charcoal-panel);
+      margin: 25px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      z-index: 5;
-      position: relative;
+      gap: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      z-index: 10;
     }
 
-    .control-deck h2 {
-      font-family: 'Arial Black', sans-serif;
-      font-size: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: -1px;
-      border-bottom: 3px dashed var(--ink-black);
-      padding-bottom: 8px;
-    }
-
-    /* Custom File Upload Button inspired by bubble cutouts in designinspo.jpg */
-    .bubble-upload-btn {
+    /* Action Buttons (Clean, Emoji-Free Typography) */
+    .upload-action-btn {
       display: block;
-      background: var(--paper-white);
-      border: 2px solid var(--ink-black);
-      border-radius: 30px;
-      padding: 10px;
+      background: linear-gradient(135deg, #ff758f 0%, #ff8fa3 100%);
+      color: white;
+      padding: 12px;
       text-align: center;
+      border-radius: 8px;
       font-weight: bold;
-      font-family: Arial, sans-serif;
       font-size: 0.85rem;
       cursor: pointer;
-      box-shadow: 3px 3px 0 var(--ink-black);
-      transition: transform 0.05s, box-shadow 0.05s;
+      box-shadow: 0 4px 12px rgba(255, 117, 143, 0.2);
+      transition: transform 0.1s, opacity 0.2s;
     }
-    .bubble-upload-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--ink-black);
-    }
+    .upload-action-btn:hover { opacity: 0.95; }
+    .upload-action-btn:active { transform: scale(0.98); }
     #image-uploader { display: none; }
 
-    .section-lbl {
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
+    .reset-action-btn {
+      background-color: #3a3a42;
+      color: #ff758f;
+      border: 1px solid #4e4e5a;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #555;
-      margin-bottom: -5px;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      transition: background-color 0.2s;
+      margin-top: auto;
     }
+    .reset-action-btn:hover { background-color: #44444e; }
 
-    /* Jewelry Storage Box Matrix grid */
+    /* Inventory Storage Matrix Grid */
     .inventory-vault {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      background: #f0f0f0;
-      border: 2px solid var(--ink-black);
-      padding: 10px;
-      max-height: 280px;
+      gap: 12px;
+      background-color: #18181c;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #2d2d34;
+      flex: 1;
       overflow-y: auto;
     }
 
-    /* HIGH CONTRAST NEWSPAPER PRINT CHARM LINKS */
-    .charm-link-block {
+    /* METALLIC LINK DESIGN CORE STRUCTURE */
+    .italian-charm-link {
       width: 60px;
       height: 60px;
-      background: var(--paper-white);
-      border: 3px solid var(--ink-black);
+      background: linear-gradient(135deg, #f0f0f2 0%, #d2d2d4 45%, #b5b5b7 55%, #9d9da0 100%);
+      border: 1px solid var(--border-metallic);
+      border-radius: 4px;
       position: relative;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.15s ease;
+      box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.8),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.2),
+        0 4px 8px rgba(0, 0, 0, 0.12);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .inventory-vault .charm-link-block:hover {
-      transform: scale(1.1) rotate(3deg);
-      z-index: 2;
+    .inventory-vault .italian-charm-link:hover {
+      transform: scale(1.08) translateY(-2px);
+      z-index: 5;
     }
 
-    /* Modular side connectors replicating the flat interlocking look */
-    .charm-link-block::after {
+    /* Internal Frame Inner Rim Lining */
+    .italian-charm-link::before {
       content: '';
       position: absolute;
-      width: 6px;
-      height: 24px;
-      background: var(--paper-white);
-      border: 2px solid var(--ink-black);
-      right: -7px;
+      top: 6px; left: 6px; right: 6px; bottom: 6px;
+      border: 2px solid #919194;
+      border-radius: 2px;
+      background-color: #e3e3e5;
+      box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.25);
+      z-index: 1;
+    }
+
+    /* Interlocking Connection Edge Link Side Hooks */
+    .italian-charm-link::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 28px;
+      background: linear-gradient(#b5b5b7, #666);
+      right: -4px;
       top: 15px;
-      z-index: -1;
+      border-radius: 0 2px 2px 0;
+      border: 1px solid #555;
+      border-left: none;
+      z-index: 0;
     }
 
     .artwork-envelope {
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
+      position: absolute;
+      top: 8px; left: 8px; right: 8px; bottom: 8px;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
-      image-rendering: pixelated; /* Keeps custom uploads crunchily retro */
+      background-size: cover;
+      background-position: center;
+      border-radius: 1px;
+      overflow: hidden;
     }
 
-    /* Main Interactive Display Room Floor */
+    /* Glossy dome reflection coat layer */
+    .gloss-reflection-layer {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 50%);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* Main Display Lounge */
     .display-lounge {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding-right: 40px;
-      position: relative;
+      padding: 40px;
     }
 
-    /* Active Horizontal Bracelet Assembly Box mimicking the menu bands on the left of designinspo.jpg */
+    /* Main Bracelet Presentation Base Display Box */
     .bracelet-assembly-deck {
       width: 100%;
-      max-width: 720px;
-      background: var(--paper-white);
-      border: 4px solid var(--ink-black);
-      box-shadow: 12px 12px 0 var(--ink-black);
-      padding: 25px;
+      max-width: 780px;
+      height: 180px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 5;
+      padding: 0 30px;
     }
 
-    .chain-link-flex-rail {
+    .chain-rail-track {
       display: flex;
       align-items: center;
-      gap: 5px; /* Clean crisp spacing gaps */
+      gap: 0px; /* Forces flat continuous layout sequence matching */
       overflow-x: auto;
-      padding: 10px 0;
       width: 100%;
+      padding: 15px 0;
     }
-    .chain-link-flex-rail::-webkit-scrollbar { display: none; }
+    .chain-rail-track::-webkit-scrollbar { display: none; }
 
-    .chain-link-flex-rail .charm-link-block {
-      width: 75px;  /* Blown up on presentation rail */
-      height: 75px;
+    .chain-rail-track .italian-charm-link {
+      width: 70px;  /* Slightly upscaled on presentation rail */
+      height: 70px;
       flex-shrink: 0;
-      animation: popInBlock 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      animation: charmJoinTrack 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15);
     }
-    .chain-link-flex-rail .charm-link-block::after {
-      width: 8px;
-      height: 30px;
-      right: -10px;
+    .chain-rail-track .italian-charm-link::before {
+      top: 7px; left: 7px; right: 7px; bottom: 7px;
+    }
+    .chain-rail-track .italian-charm-link::after {
+      width: 4px;
+      height: 32px;
+      right: -4px;
       top: 18px;
     }
-    .chain-link-flex-rail .charm-link-block:last-child::after {
-      display: none; /* Hide dangling end link clip */
+    .chain-rail-track .italian-charm-link:last-child::after {
+      display: none; /* Hide loose dangling clip at end of layout line */
     }
 
-    @keyframes popInBlock {
-      0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
-      100% { transform: scale(1) rotate(0); opacity: 1; }
+    @keyframes charmJoinTrack {
+      0% { transform: scale(0.6) translateX(-20px); opacity: 0; }
+      100% { transform: scale(1) translateX(0); opacity: 1; }
     }
 
-    /* Decorative Vertical Banner text box pulled straight out of the graphic theme */
-    .vertical-banner-tag {
-      position: absolute;
-      right: 25px;
-      top: 40px;
-      background: var(--paper-white);
-      border: 3px solid var(--ink-black);
-      padding: 15px 6px;
-      font-family: 'Arial Black', sans-serif;
+    .instruction-ticker-tag {
+      margin-top: 20px;
       font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      writing-mode: vertical-rl;
-      text-orientation: upright;
-      box-shadow: 4px 4px 0 var(--ink-black);
-      z-index: 2;
-    }
-
-    .footer-ticker-tag {
-      margin-top: 30px;
-      background: var(--paper-white);
-      border: 2px solid var(--ink-black);
-      padding: 6px 16px;
-      font-size: 0.85rem;
       font-weight: bold;
-      letter-spacing: 0.5px;
-      transform: rotate(-1deg);
-      box-shadow: 3px 3px 0 var(--ink-black);
-    }
-
-    .reset-btn {
-      background: #ff4757;
-      color: white;
-      font-family: Arial, sans-serif;
-      font-size: 0.75rem;
+      color: #a48b8e;
       text-transform: uppercase;
-      font-weight: bold;
-      padding: 8px;
-      border: 2px solid var(--ink-black);
-      cursor: pointer;
-      box-shadow: 3px 3px 0 var(--ink-black);
-      margin-top: auto;
+      letter-spacing: 1px;
     }
-    .reset-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink-black); }
   </style>
 </head>
 <body>
 
-  <!-- Main Canvas Frame container inner lounge box mapping -->
   <div class="app-canvas">
     
-    <!-- Vertical Print Accent Label Tag -->
-    <div class="vertical-banner-tag">Special Section</div>
+    <div class="control-deck">
+      <label for="image-uploader" class="upload-action-btn">
+        Upload Image
+      </label>
+      <input type="file" id="image-uploader" accept="image/png, image/jpeg">
 
-    <!-- Left Controls Panel Block Frame -->
-    <div class="control-deck zine-box">
-      <h2>Charm Editor</h2>
-      
-      <div style="display:flex; flex-direction:column; gap:6px;">
-        <span class="section-lbl">Collage Generator</span>
-        <label for="image-uploader" class="bubble-upload-btn">
-          💥 Load Custom PNG/JPG Image
-        </label>
-        <input type="file" id="image-uploader" accept="image/png, image/jpeg">
-      </div>
-
-      <div style="display:flex; flex-direction:column; flex:1; gap:8px; margin-top:5px;">
-        <span class="section-lbl">Jewelry Box Stock</span>
-        <div class="inventory-vault" id="vault-target">
-          <!-- Populated by JavaScript logic matrices -->
+      <div class="inventory-vault" id="vault-target">
         </div>
-      </div>
 
-      <button class="reset-btn" id="purge-rail-btn">Clear Bracelet</button>
+      <button class="reset-action-btn" id="purge-rail-btn">Clear Bracelet</button>
     </div>
 
-    <!-- Active Presentation Runway Platform Area -->
     <div class="display-lounge">
-      
-      <!-- Horizontal Linked Bracelet Rail matching the item banners -->
       <div class="bracelet-assembly-deck">
-        <div class="chain-link-flex-rail" id="active-rail-track">
-          <!-- Active assembled charms hook here -->
-        </div>
+        <div class="chain-rail-track" id="active-rail-track">
+          </div>
       </div>
 
-      <!-- Whimsical Interactive Instruction Note -->
-      <div class="footer-ticker-tag">
-        👉 CLICK VAULT LINK TO SNAP ONTO BRACELET • CLICK RAIL BLOCK TO DISCARD
+      <div class="instruction-ticker-tag">
+        Click a charm to add to bracelet • Click an active charm to remove
       </div>
-
     </div>
 
   </div>
@@ -325,45 +280,41 @@
     const imageUploader = document.getElementById('image-uploader');
     const purgeRailBtn = document.getElementById('purge-rail-btn');
 
-    // Central App State Database Repository (Featuring quirky aesthetic inline vector glyph shapes)
+    // Baseline Asset Database Arrays Configuration 
     let charmVaultMemory = [
-      { id: 'zine_cat', type: 'svg', content: `<svg viewBox="0 0 24 24" width="36" height="36" fill="#000"><path d="M12 2c-1.1 0-2 .9-2 2v1.1C8.4 5.6 7 7.6 7 10v4l-2 2v1h14v-1l-2-2v-4c0-2.4-1.4-4.4-3-4.9V4c0-1.1-.9-2-2-2zm0 18c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z"/></svg>` }, // Bell charm
-      { id: 'zine_heart', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#ff3366" width="34" height="34"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>` },
-      { id: 'zine_star', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#000" width="34" height="34"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>` },
-      { id: 'zine_peace', type: 'svg', content: `<svg viewBox="0 0 24 24" stroke="#000" stroke-width="2" fill="none" width="32" height="32"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M12 12l7 7M12 12L5 17"/></svg>` },
-      { id: 'zine_eye', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" width="34" height="34"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3" fill="#fcd116"/></svg>` }, // Eye graphic inspired by the cat collage iris
-      { id: 'zine_initial', type: 'text', content: 'A' },
-      { id: 'zine_initial2', type: 'text', content: 'H' }
+      { id: 'classic_heart', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#ff4d6d" width="34" height="34"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>` },
+      { id: 'classic_star', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#ffd166" width="34" height="34"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>` },
+      { id: 'classic_yin', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#222" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-13c-1.38 0-2.5 1.12-2.5 2.5S10.62 10 12 10s2.5-1.12 2.5-2.5S13.38 7 12 7zm0 6c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z" fill="#fff"/><path d="M12 4c-4.41 0-8 3.59-8 8s3.59 8 8 8V4z"/></svg>` },
+      { id: 'classic_daisy', type: 'svg', content: `<svg viewBox="0 0 24 24" width="34" height="34"><circle cx="12" cy="12" r="3" fill="#ffd166"/><path d="M12 2a2 2 0 00-2 2v2a2 2 0 004 0V4a2 2 0 00-2-2zm0 14a2 2 0 00-2 2v2a2 2 0 004 0v-2a2 2 0 00-2-2zM4 10a2 2 0 00-2 22 2 0 004 0v-2a2 2 0 00-2-2zm14 2a2 2 0 00-2 2v2a2 2 0 004 0v-2a2 2 0 00-2-2z" fill="#a48b8e" opacity="0.85"/></svg>` },
+      { id: 'classic_initial', type: 'svg', content: `<svg viewBox="0 0 24 24" width="32" height="32"><text x="50%" y="75%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="18" fill="#06d6a0">M</text></svg>` }
     ];
 
     let activeBraceletChain = [];
 
     window.onload = () => {
       generateInventoryVaultGrid();
-      // Setup default placeholder configuration strings on initialization
-      activeBraceletChain = [charmVaultMemory[4], charmVaultMemory[1], charmVaultMemory[2], charmVaultMemory[5], charmVaultMemory[6]];
+      // Instantiation starter load profile tracking configurations
+      activeBraceletChain = [charmVaultMemory[0], charmVaultMemory[1], charmVaultMemory[3]];
       buildActiveBraceletRail();
     };
 
-    // Render Left Hand Selection Vault Frame Grid
+    // Render Storage Inventory Selector Matrix
     function generateInventoryVaultGrid() {
       vaultTarget.innerHTML = "";
       charmVaultMemory.forEach(charm => {
         const link = document.createElement('div');
-        link.classList.add('charm-link-block');
+        link.classList.add('italian-charm-link');
 
         const env = document.createElement('div');
         env.classList.add('artwork-envelope');
 
         if (charm.type === 'svg') {
           env.innerHTML = charm.content;
-        } else if (charm.type === 'text') {
-          env.style.fontFamily = 'Arial Black, sans-serif';
-          env.style.fontSize = '1.4rem';
-          env.style.color = '#000';
-          env.textContent = charm.content;
         } else if (charm.type === 'upload') {
           env.style.backgroundImage = `url('${charm.content}')`;
+          const gloss = document.createElement('div');
+          gloss.classList.add('gloss-reflection-layer');
+          env.appendChild(gloss);
         }
 
         link.appendChild(env);
@@ -372,25 +323,23 @@
       });
     }
 
-    // Render Center Active Horizontal Linked Bracelet
+    // Render Interactive Horizontal Linked Chain Band
     function buildActiveBraceletRail() {
       activeRailTrack.innerHTML = "";
       activeBraceletChain.forEach((charm, positionIdx) => {
         const link = document.createElement('div');
-        link.classList.add('charm-link-block');
+        link.classList.add('italian-charm-link');
 
         const env = document.createElement('div');
         env.classList.add('artwork-envelope');
 
         if (charm.type === 'svg') {
           env.innerHTML = charm.content;
-        } else if (charm.type === 'text') {
-          env.style.fontFamily = 'Arial Black, sans-serif';
-          env.style.fontSize = '1.6rem';
-          env.style.color = '#000';
-          env.textContent = charm.content;
         } else if (charm.type === 'upload') {
           env.style.backgroundImage = `url('${charm.content}')`;
+          const gloss = document.createElement('div');
+          gloss.classList.add('gloss-reflection-layer');
+          env.appendChild(gloss);
         }
 
         link.appendChild(env);
@@ -400,8 +349,8 @@
     }
 
     function appendCharmToRailTrack(charmPayload) {
-      if (activeBraceletChain.length >= 8) {
-        alert("The newsprint display row is full! Click an active piece to slice it out.");
+      if (activeBraceletChain.length >= 12) {
+        alert("The bracelet band is full. Click an active charm to remove it.");
         return;
       }
       activeBraceletChain.push(charmPayload);
@@ -413,7 +362,7 @@
       buildActiveBraceletRail();
     }
 
-    // Binary Stream Image processing loop handling standard uploads
+    // Binary File Stream Pipeline Reader
     imageUploader.addEventListener('change', function(e) {
       const fileTarget = e.target.files[0];
       if (!fileTarget) return;
@@ -422,14 +371,14 @@
       streamReader.onload = function(event) {
         const compiledDataUrl = event.target.result;
         
-        // Push user asset object up onto global vault directory
+        // Prepend freshly loaded element payload node back to storage array
         charmVaultMemory.unshift({
-          id: `custom_zine_asset_${Date.now()}`,
+          id: `custom_charm_link_${Date.now()}`,
           type: 'upload',
           content: compiledDataUrl
         });
 
-        // Trigger updates across dynamic window elements
+        // Refresh views
         generateInventoryVaultGrid();
         appendCharmToRailTrack(charmVaultMemory[0]);
       };
