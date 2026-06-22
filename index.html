@@ -3,436 +3,442 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>90s Italian Charm Bracelet Generator</title>
+  <title>Maximalist Italian Charm Studio</title>
   <style>
     :root {
-      --bg-velvet: #f7d6d8;      /* Soft plush velvet jewelry box pink */
-      --tray-shaded: #ebd0d2;    /* Recessed velvet tray shadows */
-      --metal-base: #d2d2d4;     /* Stainless steel flat grey */
-      --sidebar-dark: #222226;   /* Sleek charcoal tool editor */
-      --text-light: #f5f5f7;
-      --text-muted: #9e9e9e;
-      --neon-pink: #ff758f;
+      --frame-yellow: #fcd116;    /* Bright yellow border from designinspo.jpg */
+      --sky-blue: #5da9e9;
+      --hill-green: #7cb518;
+      --ink-black: #000000;
+      --paper-white: #ffffff;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Georgia', Times, serif;
       user-select: none;
     }
 
+    /* Page container simulating the outer yellow frame of designinspo.jpg */
     body {
-      display: flex;
+      background-color: var(--frame-yellow);
+      padding: 25px;
       height: 100vh;
-      background-color: var(--bg-velvet);
-      color: var(--sidebar-dark);
+      display: flex;
       overflow: hidden;
     }
 
-    /* Workbench Sidebar Settings */
-    .sidebar {
-      width: 360px;
-      background-color: var(--sidebar-dark);
-      color: var(--text-light);
-      padding: 25px;
+    /* Main workspace wrapper containing the surreal background collage */
+    .app-canvas {
+      flex: 1;
+      border: 4px solid var(--ink-black);
+      background: linear-gradient(to bottom, var(--sky-blue) 0%, #bde0fe 50%, var(--hill-green) 55%, #4f772d 100%);
+      position: relative;
       display: flex;
-      flex-direction: column;
-      gap: 20px;
-      box-shadow: 8px 0 25px rgba(0,0,0,0.3);
-      z-index: 10;
-      overflow-y: auto;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     }
 
-    .sidebar h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: var(--neon-pink);
+    /* CSS Cloud/Surreal Elements Background Art Layers */
+    .app-canvas::before {
+      content: '☁️';
+      position: absolute;
+      top: 10%; left: 40%; font-size: 5rem; opacity: 0.35;
+    }
+    .app-canvas::after {
+      content: '☁️';
+      position: absolute;
+      top: 25%; left: 80%; font-size: 7rem; opacity: 0.25;
+    }
+
+    /* Heavy Ink Zine-Style Panels */
+    .zine-box {
+      background-color: var(--paper-white);
+      border: 3px solid var(--ink-black);
+      box-shadow: 7px 7px 0px var(--ink-black);
+      border-radius: 2px;
+      padding: 20px;
+    }
+
+    /* Left Control panel styled like a print flyer cut-out */
+    .control-deck {
+      width: 350px;
+      margin: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 5;
+      position: relative;
+    }
+
+    .control-deck h2 {
+      font-family: 'Arial Black', sans-serif;
+      font-size: 1.5rem;
       text-transform: uppercase;
-      border-bottom: 2px solid #3a3a42;
-      padding-bottom: 10px;
+      letter-spacing: -1px;
+      border-bottom: 3px dashed var(--ink-black);
+      padding-bottom: 8px;
     }
 
-    /* Custom Hidden File Uploader Interface */
-    .upload-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .custom-file-upload {
-      background: linear-gradient(135deg, #ff758f 0%, #ff8fa3 100%);
-      color: white;
-      padding: 12px;
+    /* Custom File Upload Button inspired by bubble cutouts in designinspo.jpg */
+    .bubble-upload-btn {
+      display: block;
+      background: var(--paper-white);
+      border: 2px solid var(--ink-black);
+      border-radius: 30px;
+      padding: 10px;
       text-align: center;
-      border-radius: 8px;
       font-weight: bold;
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(255, 117, 143, 0.3);
-      transition: transform 0.1s, opacity 0.2s;
+      box-shadow: 3px 3px 0 var(--ink-black);
+      transition: transform 0.05s, box-shadow 0.05s;
     }
-    .custom-file-upload:hover { opacity: 0.9; }
-    .custom-file-upload:active { transform: scale(0.98); }
+    .bubble-upload-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--ink-black);
+    }
     #image-uploader { display: none; }
 
-    .section-title {
-      font-size: 0.85rem;
+    .section-lbl {
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-top: 10px;
+      letter-spacing: 1.5px;
+      color: #555;
+      margin-bottom: -5px;
     }
 
-    /* Charm Grid Jewelry Box Collection */
-    .charm-box-grid {
+    /* Jewelry Storage Box Matrix grid */
+    .inventory-vault {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      background-color: #18181c;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #2d2d34;
-      max-height: 400px;
+      gap: 10px;
+      background: #f0f0f0;
+      border: 2px solid var(--ink-black);
+      padding: 10px;
+      max-height: 280px;
       overflow-y: auto;
     }
 
-    /* CORE ITALIAN CHARM CSS METALLIC ARCHITECTURE */
-    .italian-charm-link {
-      width: 62px;
-      height: 62px;
-      background: linear-gradient(135deg, #f0f0f2 0%, #d2d2d4 45%, #b5b5b7 55%, #9d9da0 100%);
-      border: 1px solid #828285;
-      border-radius: 4px;
+    /* HIGH CONTRAST NEWSPAPER PRINT CHARM LINKS */
+    .charm-link-block {
+      width: 60px;
+      height: 60px;
+      background: var(--paper-white);
+      border: 3px solid var(--ink-black);
       position: relative;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 
-        inset 1px 1px 0px rgba(255,255,255,0.8),
-        inset -1px -1px 0px rgba(0,0,0,0.2),
-        0 4px 8px rgba(0,0,0,0.15);
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.15s ease;
     }
-    .charm-box-grid .italian-charm-link:hover {
-      transform: scale(1.08) translateY(-2px);
+    .inventory-vault .charm-link-block:hover {
+      transform: scale(1.1) rotate(3deg);
+      z-index: 2;
+    }
+
+    /* Modular side connectors replicating the flat interlocking look */
+    .charm-link-block::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 24px;
+      background: var(--paper-white);
+      border: 2px solid var(--ink-black);
+      right: -7px;
+      top: 15px;
+      z-index: -1;
+    }
+
+    .artwork-envelope {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      image-rendering: pixelated; /* Keeps custom uploads crunchily retro */
+    }
+
+    /* Main Interactive Display Room Floor */
+    .display-lounge {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-right: 40px;
+      position: relative;
+    }
+
+    /* Active Horizontal Bracelet Assembly Box mimicking the menu bands on the left of designinspo.jpg */
+    .bracelet-assembly-deck {
+      width: 100%;
+      max-width: 720px;
+      background: var(--paper-white);
+      border: 4px solid var(--ink-black);
+      box-shadow: 12px 12px 0 var(--ink-black);
+      padding: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       z-index: 5;
     }
 
-    /* Inset Link Shield Frame Rim */
-    .italian-charm-link::before {
-      content: '';
-      position: absolute;
-      top: 6px; left: 6px; right: 6px; bottom: 6px;
-      border: 2px solid #919194;
-      border-radius: 2px;
-      background-color: #e3e3e5;
-      box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
-      z-index: 1;
-    }
-
-    /* Interlocking side hooks look (Italian bracelet attachment edges) */
-    .italian-charm-link::after {
-      content: '';
-      position: absolute;
-      width: 4px;
-      height: 30px;
-      background: linear-gradient(#b5b5b7, #666);
-      right: -4px;
-      top: 16px;
-      border-radius: 0 2px 2px 0;
-      border: 1px solid #555;
-      border-left: none;
-      z-index: 0;
-    }
-
-    /* Inside Graphics Container Wrapper Frame */
-    .charm-artwork {
-      position: absolute;
-      top: 8px; left: 8px; right: 8px; bottom: 8px;
-      z-index: 2;
+    .chain-link-flex-rail {
       display: flex;
       align-items: center;
-      justify-content: center;
-      background-size: cover;
-      background-position: center;
-      border-radius: 1px;
-      overflow: hidden;
-    }
-
-    /* Applies glossy dome reflection coat over custom uploads */
-    .gloss-coat {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 50%);
-      z-index: 3;
-      pointer-events: none;
-    }
-
-    /* Main Display Lounge Room Canvas */
-    .display-lounge {
-      flex: 1;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-
-    /* Plush Velvet Presentation Jewelry Display Tray Box */
-    .velvet-tray {
-      width: 100%;
-      max-width: 820px;
-      height: 320px;
-      background-color: var(--bg-velvet);
-      border-radius: 24px;
-      border: 14px solid #ebd0d2;
-      box-shadow: 
-        inset 0 10px 30px rgba(0,0,0,0.08),
-        0 15px 40px rgba(0,0,0,0.12);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-
-    /* Deep Shaded Velvet Slots Channels where bracelet lies resting */
-    .tray-groove-track {
-      width: 90%;
-      height: 90px;
-      background-color: var(--tray-shaded);
-      border-radius: 12px;
-      box-shadow: inset 0 4px 10px rgba(0,0,0,0.1);
-      display: flex;
-      align-items: center;
-      padding: 0 20px;
+      gap: 5px; /* Clean crisp spacing gaps */
       overflow-x: auto;
-      overflow-y: hidden;
-      white-space: nowrap;
+      padding: 10px 0;
+      width: 100%;
     }
-    /* Hide native scroll track scrollbars */
-    .tray-groove-track::-webkit-scrollbar { display: none; }
+    .chain-link-flex-rail::-webkit-scrollbar { display: none; }
 
-    /* The Interlocked Active Wrist Band Chain Wrapper */
-    .active-bracelet-chain {
-      display: flex;
-      align-items: center;
-      gap: 0px; /* Crucial: links stack perfectly side by side touch formatting */
+    .chain-link-flex-rail .charm-link-block {
+      width: 75px;  /* Blown up on presentation rail */
+      height: 75px;
+      flex-shrink: 0;
+      animation: popInBlock 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     }
-
-    .active-bracelet-chain .italian-charm-link {
-      animation: snapIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+    .chain-link-flex-rail .charm-link-block::after {
+      width: 8px;
+      height: 30px;
+      right: -10px;
+      top: 18px;
     }
-
-    /* Last link hidden attachment clip fix override */
-    .active-bracelet-chain .italian-charm-link:last-child::after {
-      display: none;
-    }
-
-    @keyframes snapIn {
-      0% { transform: scale(0.6) translateX(-30px); opacity: 0; }
-      100% { transform: scale(1) translateX(0); opacity: 1; }
+    .chain-link-flex-rail .charm-link-block:last-child::after {
+      display: none; /* Hide dangling end link clip */
     }
 
-    .action-row-btn {
-      background-color: #3a3a42;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
+    @keyframes popInBlock {
+      0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    /* Decorative Vertical Banner text box pulled straight out of the graphic theme */
+    .vertical-banner-tag {
+      position: absolute;
+      right: 25px;
+      top: 40px;
+      background: var(--paper-white);
+      border: 3px solid var(--ink-black);
+      padding: 15px 6px;
+      font-family: 'Arial Black', sans-serif;
+      font-size: 0.8rem;
       text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-      transition: background 0.2s;
+      letter-spacing: 4px;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      box-shadow: 4px 4px 0 var(--ink-black);
+      z-index: 2;
     }
-    .action-row-btn:hover { background-color: #4a4a54; }
 
-    .tray-meta-label {
-      margin-top: 15px;
+    .footer-ticker-tag {
+      margin-top: 30px;
+      background: var(--paper-white);
+      border: 2px solid var(--ink-black);
+      padding: 6px 16px;
       font-size: 0.85rem;
       font-weight: bold;
-      color: #9c8284;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      transform: rotate(-1deg);
+      box-shadow: 3px 3px 0 var(--ink-black);
     }
+
+    .reset-btn {
+      background: #ff4757;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding: 8px;
+      border: 2px solid var(--ink-black);
+      cursor: pointer;
+      box-shadow: 3px 3px 0 var(--ink-black);
+      margin-top: auto;
+    }
+    .reset-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink-black); }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar Toolbox Workspace Panels -->
-  <div class="sidebar">
-    <h2>Charm Studio</h2>
+  <!-- Main Canvas Frame container inner lounge box mapping -->
+  <div class="app-canvas">
     
-    <!-- Custom Upload Form Portals -->
-    <div class="upload-container">
-      <span class="section-title">Create Custom Charm</span>
-      <label for="image-uploader" class="custom-file-upload">
-        ✨ Upload JPG / PNG Photo
-      </label>
-      <input type="file" id="image-uploader" accept="image/png, image/jpeg">
-    </div>
+    <!-- Vertical Print Accent Label Tag -->
+    <div class="vertical-banner-tag">Special Section</div>
 
-    <!-- Inventory Grid Box -->
-    <div style="display:flex; flex-direction:column; flex:1; gap:10px;">
-      <span class="section-title">Jewelry Box Inventory</span>
-      <div class="charm-box-grid" id="charm-vault-target">
-        <!-- Built-in + User uploaded elements populate here dynamically -->
-      </div>
-    </div>
-
-    <button class="action-row-btn" id="clear-chain-btn" style="background-color: #cc5a71;">Reset Bracelet</button>
-  </div>
-
-  <!-- Main Presentation Lounge Stage Canvas Display Area -->
-  <div class="display-lounge">
-    <div class="velvet-tray">
+    <!-- Left Controls Panel Block Frame -->
+    <div class="control-deck zine-box">
+      <h2>Charm Editor</h2>
       
-      <!-- The Recessed Velvet Bed Channel Link Track -->
-      <div class="tray-groove-track">
-        <div class="active-bracelet-chain" id="live-bracelet-band">
-          <!-- Active attached locked modular links render here -->
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <span class="section-lbl">Collage Generator</span>
+        <label for="image-uploader" class="bubble-upload-btn">
+          💥 Load Custom PNG/JPG Image
+        </label>
+        <input type="file" id="image-uploader" accept="image/png, image/jpeg">
+      </div>
+
+      <div style="display:flex; flex-direction:column; flex:1; gap:8px; margin-top:5px;">
+        <span class="section-lbl">Jewelry Box Stock</span>
+        <div class="inventory-vault" id="vault-target">
+          <!-- Populated by JavaScript logic matrices -->
         </div>
       </div>
 
+      <button class="reset-btn" id="purge-rail-btn">Clear Bracelet</button>
     </div>
-    <div class="tray-meta-label">✨ Click box charm to add • Click band charm to remove ✨</div>
+
+    <!-- Active Presentation Runway Platform Area -->
+    <div class="display-lounge">
+      
+      <!-- Horizontal Linked Bracelet Rail matching the item banners -->
+      <div class="bracelet-assembly-deck">
+        <div class="chain-link-flex-rail" id="active-rail-track">
+          <!-- Active assembled charms hook here -->
+        </div>
+      </div>
+
+      <!-- Whimsical Interactive Instruction Note -->
+      <div class="footer-ticker-tag">
+        👉 CLICK VAULT LINK TO SNAP ONTO BRACELET • CLICK RAIL BLOCK TO DISCARD
+      </div>
+
+    </div>
+
   </div>
 
   <script>
-    const vaultTarget = document.getElementById('charm-vault-target');
-    const braceletBand = document.getElementById('live-bracelet-band');
+    const vaultTarget = document.getElementById('vault-target');
+    const activeRailTrack = document.getElementById('active-rail-track');
     const imageUploader = document.getElementById('image-uploader');
-    const clearChainBtn = document.getElementById('clear-chain-btn');
+    const purgeRailBtn = document.getElementById('purge-rail-btn');
 
-    // Central App Global Assets Vault Array Memory
-    let charmInventory = [
-      { id: 'starter_heart', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#ff4d6d" width="34" height="34"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>` },
-      { id: 'starter_star', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#ffd166" width="36" height="36"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>` },
-      { id: 'starter_yin', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#222" width="34" height="34"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-13c-1.38 0-2.5 1.12-2.5 2.5S10.62 10 12 10s2.5-1.12 2.5-2.5S13.38 7 12 7zm0 6c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z" fill="#fff"/><path d="M12 4c-4.41 0-8 3.59-8 8s3.59 8 8 8V4z"/></svg>` },
-      { id: 'starter_daisy', type: 'svg', content: `<svg viewBox="0 0 24 24" width="36" height="36"><circle cx="12" cy="12" r="3" fill="#ffd166"/><path d="M12 2a2 2 0 00-2 2v2a2 2 0 004 0V4a2 2 0 00-2-2zm0 14a2 2 0 00-2 2v2a2 2 0 004 0v-2a2 2 0 00-2-2zM4 10a2 2 0 00-2 22 2 0 004 0v-2a2 2 0 00-2-2zm14 2a2 2 0 00-2 2v2a2 2 0 004 0v-2a2 2 0 00-2-2z" fill="#fff" opacity="0.9"/></svg>` },
-      { id: 'starter_initial', type: 'svg', content: `<svg viewBox="0 0 24 24" width="34" height="34"><text x="50%" y="75%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="20" fill="#06d6a0">J</text></svg>` }
+    // Central App State Database Repository (Featuring quirky aesthetic inline vector glyph shapes)
+    let charmVaultMemory = [
+      { id: 'zine_cat', type: 'svg', content: `<svg viewBox="0 0 24 24" width="36" height="36" fill="#000"><path d="M12 2c-1.1 0-2 .9-2 2v1.1C8.4 5.6 7 7.6 7 10v4l-2 2v1h14v-1l-2-2v-4c0-2.4-1.4-4.4-3-4.9V4c0-1.1-.9-2-2-2zm0 18c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z"/></svg>` }, // Bell charm
+      { id: 'zine_heart', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#ff3366" width="34" height="34"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>` },
+      { id: 'zine_star', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="#000" width="34" height="34"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>` },
+      { id: 'zine_peace', type: 'svg', content: `<svg viewBox="0 0 24 24" stroke="#000" stroke-width="2" fill="none" width="32" height="32"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M12 12l7 7M12 12L5 17"/></svg>` },
+      { id: 'zine_eye', type: 'svg', content: `<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" width="34" height="34"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3" fill="#fcd116"/></svg>` }, // Eye graphic inspired by the cat collage iris
+      { id: 'zine_initial', type: 'text', content: 'A' },
+      { id: 'zine_initial2', type: 'text', content: 'H' }
     ];
 
     let activeBraceletChain = [];
 
-    // Core Initialization Entry point Lifecycle loops
     window.onload = () => {
-      renderInventoryVault();
-      // Pre-populate bracelet with default layout links on start
-      activeBraceletChain = [...charmInventory.slice(0, 3)];
-      renderActiveBraceletBand();
+      generateInventoryVaultGrid();
+      // Setup default placeholder configuration strings on initialization
+      activeBraceletChain = [charmVaultMemory[4], charmVaultMemory[1], charmVaultMemory[2], charmVaultMemory[5], charmVaultMemory[6]];
+      buildActiveBraceletRail();
     };
 
-    // Render Inventory Selection Grid UI Layout
-    function renderInventoryVault() {
+    // Render Left Hand Selection Vault Frame Grid
+    function generateInventoryVaultGrid() {
       vaultTarget.innerHTML = "";
-      charmInventory.forEach(charm => {
-        const charmLink = document.createElement('div');
-        charmLink.classList.add('italian-charm-link');
-        
-        const artworkContainer = document.createElement('div');
-        artworkContainer.classList.add('charm-artwork');
+      charmVaultMemory.forEach(charm => {
+        const link = document.createElement('div');
+        link.classList.add('charm-link-block');
+
+        const env = document.createElement('div');
+        env.classList.add('artwork-envelope');
 
         if (charm.type === 'svg') {
-          artworkContainer.innerHTML = charm.content;
+          env.innerHTML = charm.content;
+        } else if (charm.type === 'text') {
+          env.style.fontFamily = 'Arial Black, sans-serif';
+          env.style.fontSize = '1.4rem';
+          env.style.color = '#000';
+          env.textContent = charm.content;
         } else if (charm.type === 'upload') {
-          artworkContainer.style.backgroundImage = `url('${charm.content}')`;
-          // Inject an extra structural mirror layer over custom uploads to make them look metallic
-          const gloss = document.createElement('div');
-          gloss.classList.add('gloss-coat');
-          artworkContainer.appendChild(gloss);
+          env.style.backgroundImage = `url('${charm.content}')`;
         }
 
-        charmLink.appendChild(artworkContainer);
-        
-        // Interaction assignment: Click to append to chain band
-        charmLink.addEventListener('click', () => attachCharmToChain(charm));
-        
-        vaultTarget.appendChild(charmLink);
+        link.appendChild(env);
+        link.addEventListener('click', () => appendCharmToRailTrack(charm));
+        vaultTarget.appendChild(link);
       });
     }
 
-    // Render Linked Active Bracelet Component Loop Track
-    function renderActiveBraceletBand() {
-      braceletBand.innerHTML = "";
-      activeBraceletChain.forEach((charm, index) => {
-        const charmLink = document.createElement('div');
-        charmLink.classList.add('italian-charm-link');
-        
-        const artworkContainer = document.createElement('div');
-        artworkContainer.classList.add('charm-artwork');
+    // Render Center Active Horizontal Linked Bracelet
+    function buildActiveBraceletRail() {
+      activeRailTrack.innerHTML = "";
+      activeBraceletChain.forEach((charm, positionIdx) => {
+        const link = document.createElement('div');
+        link.classList.add('charm-link-block');
+
+        const env = document.createElement('div');
+        env.classList.add('artwork-envelope');
 
         if (charm.type === 'svg') {
-          artworkContainer.innerHTML = charm.content;
+          env.innerHTML = charm.content;
+        } else if (charm.type === 'text') {
+          env.style.fontFamily = 'Arial Black, sans-serif';
+          env.style.fontSize = '1.6rem';
+          env.style.color = '#000';
+          env.textContent = charm.content;
         } else if (charm.type === 'upload') {
-          artworkContainer.style.backgroundImage = `url('${charm.content}')`;
-          const gloss = document.createElement('div');
-          gloss.classList.add('gloss-coat');
-          artworkContainer.appendChild(gloss);
+          env.style.backgroundImage = `url('${charm.content}')`;
         }
 
-        charmLink.appendChild(artworkContainer);
-        
-        // Interaction assignment: Click to detach slice out of array sequence
-        charmLink.addEventListener('click', () => detachCharmFromChain(index));
-        
-        braceletBand.appendChild(charmLink);
+        link.appendChild(env);
+        link.addEventListener('click', () => discardCharmFromRailTrack(positionIdx));
+        activeRailTrack.appendChild(link);
       });
     }
 
-    // Append Node Array Routing
-    function attachCharmToChain(charmPayload) {
-      // Italian bracelets usually look best capped at around 12-14 links on standard view screens
-      if (activeBraceletChain.length >= 13) {
-        alert("Your modular band track loop is full! Remove a charm to swap in new links.");
+    function appendCharmToRailTrack(charmPayload) {
+      if (activeBraceletChain.length >= 8) {
+        alert("The newsprint display row is full! Click an active piece to slice it out.");
         return;
       }
       activeBraceletChain.push(charmPayload);
-      renderActiveBraceletBand();
+      buildActiveBraceletRail();
     }
 
-    // Remove Array Index Splice Routing
-    function detachCharmFromChain(targetIndex) {
-      activeBraceletChain.splice(targetIndex, 1);
-      renderActiveBraceletBand();
+    function discardCharmFromRailTrack(targetIdx) {
+      activeBraceletChain.splice(targetIdx, 1);
+      buildActiveBraceletRail();
     }
 
-    // Binary Stream Reader Pipeline for custom user uploads
+    // Binary Stream Image processing loop handling standard uploads
     imageUploader.addEventListener('change', function(e) {
-      const selectedFile = e.target.files[0];
-      if (!selectedFile) return;
+      const fileTarget = e.target.files[0];
+      if (!fileTarget) return;
 
-      const fileStreamReader = new FileReader();
-      fileStreamReader.onload = function(event) {
-        const generatedDataUrl = event.target.result;
+      const streamReader = new FileReader();
+      streamReader.onload = function(event) {
+        const compiledDataUrl = event.target.result;
         
-        // Append newly compiled upload node back to database memory
-        const uniqueUploadId = `user_upload_${Date.now()}`;
-        charmInventory.unshift({
-          id: uniqueUploadId,
+        // Push user asset object up onto global vault directory
+        charmVaultMemory.unshift({
+          id: `custom_zine_asset_${Date.now()}`,
           type: 'upload',
-          content: generatedDataUrl
+          content: compiledDataUrl
         });
 
-        // Refresh layouts vectors updates
-        renderInventoryVault();
-        // Automatically clip onto active band straight away for slick UX feedback loops
-        attachCharmToChain(charmInventory[0]);
+        // Trigger updates across dynamic window elements
+        generateInventoryVaultGrid();
+        appendCharmToRailTrack(charmVaultMemory[0]);
       };
-      
-      fileStreamReader.readAsDataURL(selectedFile);
+      streamReader.readAsDataURL(fileTarget);
     });
 
-    // Reset Core State Trigger Action
-    clearChainBtn.addEventListener('click', () => {
+    purgeRailBtn.addEventListener('click', () => {
       activeBraceletChain = [];
-      renderActiveBraceletBand();
+      buildActiveBraceletRail();
     });
   </script>
 </body>
